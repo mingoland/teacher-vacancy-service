@@ -1,11 +1,29 @@
 #!/bin/sh
 set -e
 
+DATABASE_URL='postgres://tvs@db:5432/tvs_test?template=template0&pool=5&encoding=unicode'
+# ELASTICSEARCH_URL='http://elasticsearch:9200'
+
 if [ $# -eq 0 ]
 then
   echo "No arguments supplied. Defaults to 'rake default'"
-  docker-compose run --rm -e RAILS_ENV=${RAILS_ENV:=test} web rake default
+
+  docker-compose run --rm \
+    -e RAILS_ENV=test \
+    -e DATABASE_URL=$DATABASE_URL \
+    web rake db:create && rake
+
 else
   echo "Testing: $@"
-  docker-compose run --rm -e RAILS_ENV=${RAILS_ENV:=test} web rspec $@
+
+  docker-compose run --rm \
+    -e RAILS_ENV=test \
+    -e DATABASE_URL=$DATABASE_URL \
+    web rake db:create && rspec $@
 fi
+
+# If there's a failing test, ensure to drop the test database at the end.
+docker-compose run --rm \
+  -e RAILS_ENV=test \
+  -e DATABASE_URL=$DATABASE_URL \
+  web rake db:drop

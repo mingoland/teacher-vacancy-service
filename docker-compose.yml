@@ -11,17 +11,18 @@ services:
     depends_on:
       - db
       - elasticsearch
-    environment:
-      - POSTGRES_URL=http://pg_data:5432
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
     env_file:
-      - docker-compose.env
+      - docker-compose.dev.env
+    tty: true
+    stdin_open: true
     restart: on-failure
 
   db:
     image: postgres
     volumes:
       - pg_data:/var/lib/postgresql/data/:cached
+    environment:
+      POSTGRES_USER: tvs
     restart: on-failure
 
   elasticsearch:
@@ -33,11 +34,9 @@ services:
       - "9300:9300"
     environment:
       - discovery.type=single-node
-      - network.host=0.0.0.0
     volumes:
       - elasticsearch:/usr/share/elasticsearch/data
 
 volumes:
-  pg_data:
-    external: false
+  pg_data: {}
   elasticsearch: {}
