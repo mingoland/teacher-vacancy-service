@@ -64,7 +64,7 @@ module "ecs" {
   http_user                             = "${var.http_user}"
   google_maps_api_key                   = "${var.google_maps_api_key}"
   secret_key_base                       = "${var.secret_key_base}"
-  list_rds_address                      = "${module.rds.list_rds_address}"
+  live_rds_address                      = "${module.rds.live_rds_address}"
 }
 
 module "logs" {
@@ -87,6 +87,9 @@ module "pipeline" {
   ecs_cluster_name                      = "${module.ecs.cluster_name}"
   ecs_service_name                      = "${module.ecs.service_name}"
   test_rds_address                      = "${module.rds.test_rds_address}"
+
+  test_vpc_id                           = "${module.test.test_vpc_id}"
+  test_security_group_id                = "${module.test.test_security_group_id}"
 }
 
 module "rds" {
@@ -103,4 +106,19 @@ module "rds" {
 
   vpc_id                                = "${module.core.vpc_id}"
   default_security_group_id             = "${module.core.default_security_group_id}"
+
+  test_vpc_id                           = "${module.test.test_vpc_id}"
+  test_security_group_id                = "${module.test.test_security_group_id}"
+}
+
+
+module "test" {
+  source                                = "./terraform/modules/test"
+
+  environment                           = "${terraform.workspace}-test"
+  project_name                          = "${var.project_name}"
+  vpc_cidr                              = "${var.vpc_cidr}"
+  availability_zones                    = "${var.availability_zones}"
+  private_subnets_cidr                  = "${var.private_subnets_cidr}"
+  availability_zones                    = "${var.availability_zones}"
 }

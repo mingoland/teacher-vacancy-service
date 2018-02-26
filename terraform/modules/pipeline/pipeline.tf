@@ -76,6 +76,12 @@ resource "aws_codebuild_project" "tvs_build" {
     type      = "CODEPIPELINE"
     buildspec = "${data.template_file.buildspec.rendered}"
   }
+
+  vpc_config {
+    vpc_id              = "${var.test_vpc_id}"
+    subnets             = ["${data.aws_subnet_ids.test.ids}"]
+    security_group_ids  = ["${var.test_security_group_id}"]
+  }
 }
 
 /* CodePipeline */
@@ -143,5 +149,12 @@ resource "aws_codepipeline" "pipeline" {
         FileName    = "imagedefinitions.json"
       }
     }
+  }
+}
+
+data "aws_subnet_ids" "test" {
+  vpc_id = "${var.test_vpc_id}"
+  tags {
+    Tier = "Private"
   }
 }

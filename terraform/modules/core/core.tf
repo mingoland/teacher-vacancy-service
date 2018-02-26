@@ -1,7 +1,7 @@
 /*====
 The VPC
 ======*/
-resource "aws_vpc" "vpc" {
+resource "aws_vpc" "main" {
   cidr_block           = "${var.vpc_cidr}"
   enable_dns_hostnames = true
   enable_dns_support   = true
@@ -17,7 +17,7 @@ Subnets
 ======*/
 /* Internet gateway for the public subnet */
 resource "aws_internet_gateway" "ig" {
-  vpc_id = "${aws_vpc.vpc.id}"
+  vpc_id = "${aws_vpc.main.id}"
 
   tags {
     Name        = "${var.project_name}-${var.environment}-igw"
@@ -45,7 +45,7 @@ resource "aws_nat_gateway" "nat" {
 
 /* Public subnet */
 resource "aws_subnet" "public_subnet" {
-  vpc_id                  = "${aws_vpc.vpc.id}"
+  vpc_id                  = "${aws_vpc.main.id}"
   count                   = "${length(var.public_subnets_cidr)}"
   cidr_block              = "${element(var.public_subnets_cidr, count.index)}"
   availability_zone       = "${element(var.availability_zones, count.index)}"
@@ -60,7 +60,7 @@ resource "aws_subnet" "public_subnet" {
 
 /* Private subnet */
 resource "aws_subnet" "private_subnet" {
-  vpc_id                  = "${aws_vpc.vpc.id}"
+  vpc_id                  = "${aws_vpc.main.id}"
   count                   = "${length(var.private_subnets_cidr)}"
   cidr_block              = "${element(var.private_subnets_cidr, count.index)}"
   availability_zone       = "${element(var.availability_zones, count.index)}"
@@ -75,7 +75,7 @@ resource "aws_subnet" "private_subnet" {
 
 /* Routing table for private subnet */
 resource "aws_route_table" "private" {
-  vpc_id = "${aws_vpc.vpc.id}"
+  vpc_id = "${aws_vpc.main.id}"
 
   tags {
     Name        = "${var.environment}-private-route-table"
@@ -85,7 +85,7 @@ resource "aws_route_table" "private" {
 
 /* Routing table for public subnet */
 resource "aws_route_table" "public" {
-  vpc_id = "${aws_vpc.vpc.id}"
+  vpc_id = "${aws_vpc.main.id}"
 
   tags {
     Name        = "${var.environment}-public-route-table"
@@ -124,7 +124,7 @@ VPC's Default Security Group
 resource "aws_security_group" "default" {
   name        = "${var.environment}-default-sg"
   description = "Default security group to allow inbound/outbound from the VPC"
-  vpc_id      = "${aws_vpc.vpc.id}"
+  vpc_id      = "${aws_vpc.main.id}"
 
   ingress {
     from_port   = 80
@@ -152,14 +152,14 @@ resource "aws_security_group" "default" {
     Environment = "${var.environment}"
   }
 
-  depends_on  = ["aws_vpc.vpc"]
+  depends_on  = ["aws_vpc.main"]
 }
 
 /* ECS agents need to communicate with AWS to register to the cluster */
 resource "aws_security_group" "ecs" {
   name        = "${var.project_name}-${var.environment}-ecs"
   description = "ECS instance security group so we can it can communicate with AWS"
-  vpc_id      = "${aws_vpc.vpc.id}"
+  vpc_id      = "${aws_vpc.main.id}"
 
   ingress {
     from_port       = 32768
@@ -180,7 +180,7 @@ resource "aws_security_group" "ecs" {
     Environment = "${var.environment}"
   }
 
-  depends_on  = ["aws_vpc.vpc"]
+  depends_on  = ["aws_vpc.main"]
 }
 
 /*====
@@ -218,7 +218,7 @@ resource "aws_alb_target_group" "alb_target_group" {
   name     = "${var.project_name}-${var.environment}-alb-tg"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = "${aws_vpc.vpc.id}"
+  vpc_id   = "${aws_vpc.main.id}"
 
   health_check {
     healthy_threshold   = "5"
@@ -242,7 +242,7 @@ resource "aws_alb_target_group" "alb_target_group" {
 resource "aws_security_group" "web_inbound_sg" {
   name        = "${var.project_name}-${var.environment}-inbound"
   description = "Allow HTTP from dxw into ALB"
-  vpc_id      = "${aws_vpc.vpc.id}"
+  vpc_id      = "${aws_vpc.main.id}"
 
   ingress {
     from_port   = 80
@@ -311,7 +311,7 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
     }
   ]
 
-  depends_on = ["aws_vpc.vpc", "aws_launch_configuration.ecs-launch-configuration", "aws_security_group.default", "aws_security_group.ecs"]
+  depends_on = ["aws_vpc.main", "aws_launch_configuration.ecs-launch-configuration", "aws_security_group.default", "aws_security_group.ecs"]
 }
 
 resource "aws_appautoscaling_target" "target" {
@@ -402,7 +402,7 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
     create_before_destroy = true
   }
 
-  depends_on = ["aws_vpc.vpc", "aws_security_group.default", "aws_security_group.ecs"]
+  depends_on = ["aws_vpc.main", "aws_security_group.default", "aws_security_group.ecs"]
 }
 
 data "template_file" "ecs-launch-configuration-user-data" {

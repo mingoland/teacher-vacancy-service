@@ -49,7 +49,7 @@ data "template_file" "web_task" {
     environment         = "${var.environment}"
     region              = "${var.region}"
     log_group           = "${var.aws_cloudwatch_log_group_name}"
-    database_url        = "${var.list_rds_address}"
+    database_url        = "${var.live_rds_address}"
   }
 }
 
