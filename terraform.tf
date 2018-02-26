@@ -64,7 +64,7 @@ module "ecs" {
   http_user                             = "${var.http_user}"
   google_maps_api_key                   = "${var.google_maps_api_key}"
   secret_key_base                       = "${var.secret_key_base}"
-  rds_address                           = "${module.rds.rds_address}"
+  list_rds_address                      = "${module.rds.list_rds_address}"
 }
 
 module "logs" {
@@ -86,6 +86,7 @@ module "pipeline" {
   registry_name                         = "${module.ecs.registry_name}"
   ecs_cluster_name                      = "${module.ecs.cluster_name}"
   ecs_service_name                      = "${module.ecs.service_name}"
+  test_rds_address                      = "${module.rds.test_rds_address}"
 }
 
 module "rds" {

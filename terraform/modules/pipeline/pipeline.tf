@@ -50,8 +50,9 @@ data "template_file" "buildspec" {
   template = "${file(var.buildspec_location)}"
 
   vars {
-    aws_account_id  = "${var.aws_account_id}"
-    image_repo_name = "${var.registry_name}"
+    aws_account_id    = "${var.aws_account_id}"
+    image_repo_name   = "${var.registry_name}"
+    test_rds_address  = "${var.test_rds_address}"
   }
 }
 

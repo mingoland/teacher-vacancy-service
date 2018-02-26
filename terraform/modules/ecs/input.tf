@@ -15,4 +15,4 @@ variable "http_pass"                   {}
 variable "http_user"                   {}
 variable "google_maps_api_key"         {}
 variable "secret_key_base"             {}
-variable "rds_address"                 {}
+variable "list_rds_address"            {}
