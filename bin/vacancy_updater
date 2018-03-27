@@ -1,0 +1,62 @@
+#!/usr/bin/env ruby
+
+vacancies = [
+  {
+    "slug": "mainscale-teacher-plus-tlr",
+    "job_title": "Mainscale teacher plus Teaching and Learning (TLR) payments",
+    "headline": "Primary class teacher needed to lead teaching and learning in school",
+    "job_description": "St Cuthbert's R.C. Primary School is looking for a caring, enthusiastic class teacher to lead teaching and learning in school. Visits to the school by applicants are warmly welcomed and encouraged. Please contact the school to arrange an appointment. Applications must be on the standard CES application form, which can be downloaded from the CESEW website (www.cesew.org.uk) and must be submitted to the headteacher. Information packs with C.E.S. are also available from the school on request. The successful candidate will be required to undergo an Enhanced Disclosure from the Disclosure and Barring Service (DBS).",
+    "subject_name": "",
+    "benefits": "We offer: * a caring and welcoming Catholic Primary school that values everybody * a commitment to your professional development * a supportive governing body and supportive staff and parents * well behaved and happy learners * a hard working staff team * a good Ofsted report with outstanding features* Teaching and Learning (TLR) payments",
+    "pay_scale_label": "",
+    "weekly_hours": "",
+    "experience": "The successful candidate will be: * committed to supporting our Catholic ethos * passionate about securing high standards of teaching and learning * a leader of others * highly motivated and conscientious to inspire staff * able to work effectively to lead a team * able to bring a 'wow factor' to inspire our learners and other teachers",
+    "education": "",
+    "qualifications": "",
+    "leadership_title": ""
+  }
+]
+
+puts "Updating #{vacancies.count} vacancies"
+vacancies.each do |new_vacancy_attributes|
+  puts new_vacancy_attributes[:slug]
+  vacancy = Vacancy.find_by(slug: new_vacancy_attributes[:slug])
+  unless vacancy
+    puts "Skipping #{new_vacancy_attributes[:slug]} as it could not be found."
+    next
+  end
+  puts "Updating #{new_vacancy_attributes[:slug]}"
+
+  vacancy.job_title = new_vacancy_attributes[:job_title]
+  vacancy.headline = new_vacancy_attributes[:headline]
+  vacancy.job_description = new_vacancy_attributes[:job_description]
+  vacancy.benefits = new_vacancy_attributes[:benefits]
+  vacancy.weekly_hours = new_vacancy_attributes[:weekly_hours]
+  vacancy.experience = new_vacancy_attributes[:experience]
+  vacancy.education = new_vacancy_attributes[:education]
+  vacancy.qualifications = new_vacancy_attributes[:qualifications]
+
+  if subject = Subject.find_by(name: new_vacancy_attributes[:subject_name])
+    vacancy.subject = subject
+  else
+    puts "Unable to update subject for #{new_vacancy_attributes[:slug]} with #{new_vacancy_attributes[:subject_name]}."
+  end
+
+  if pay_scale = PayScale.find_by(label: new_vacancy_attributes[:pay_scale_label])
+    vacancy.pay_scale = pay_scale
+  else
+    puts "Unable to update pay_scale for #{new_vacancy_attributes[:slug]} with #{new_vacancy_attributes[:pay_scale_label]}."
+  end
+
+  if leadership = Leadership.find_by(title: new_vacancy_attributes[:leadership_title])
+    vacancy.leadership = leadership
+  else
+    puts "Unable to update leadership for #{new_vacancy_attributes[:slug]} with #{new_vacancy_attributes[:leadership_title]}."
+  end
+
+  if vacancy.save(validate: false)
+    puts "Saving vacancy #{new_vacancy_attributes[:slug]}."
+  else
+    puts "Unable to save vacancy #{new_vacancy_attributes[:slug]}."
+  end
+end
