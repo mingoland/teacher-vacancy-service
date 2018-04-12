@@ -188,6 +188,8 @@ variable "cloudfront_aliases" {
   description = "Match this value to the alias associated with the cloudfront_certificate_arn, eg. tvs.staging.dxw.net"
   type        = "list"
 }
+variable "offline_bucket_domain_name" {}
+variable "offline_bucket_origin_path" {}
 
 # Cloudwatch
 variable "cloudwatch_slack_hook_url" {
@@ -204,6 +206,7 @@ variable "cloudwatch_ops_genie_api_key" {
 
 # Application
 variable "rails_env" {}
+
 variable "override_school_urn" {}
 variable "http_user" {}
 variable "http_pass" {}
