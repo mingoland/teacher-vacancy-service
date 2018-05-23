@@ -13,6 +13,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
            discovery: true,
            response_type: :code,
            issuer: dfe_sign_in_issuer_url,
+           scope: %i[openid email organisation],
            client_signing_alg: :RS256,
            client_options: {
              port: dfe_sign_in_issuer_uri.port,
