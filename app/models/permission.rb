@@ -64,6 +64,7 @@ class Permission
   }.freeze
 
   TEAM_USER_TO_SCHOOL_MAPPING = {
+    '00477BA5-3E72-4B14-AEA8-0741B1B12433' => '137138', # test@
     'a5161a87-94d6-4723-823b-90d10a5760d6' => '137138', # test@
     '7d842528-52c8-49db-9deb-6bd4d9aaf7c8' => '111692', # fiona@
     '072c5093-522f-42d2-bdd7-4f8eaac13f6a' => '137138', # despo@

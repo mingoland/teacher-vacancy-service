@@ -15,15 +15,9 @@ RSpec.feature 'Hiring staff can sign in' do
   end
 
   scenario 'with valid credentials that do match a school', elasticsearch: true do
-    OmniAuth.config.mock_auth[:default] = OmniAuth::AuthHash.new(
-      provider: 'default',
-      extra: {
-        raw_info: {
-          id_token_claims: {
-            oid: 'a-valid-oid'
-          }
-        }
-      }
+    OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(
+      provider: 'dfe',
+      uid: 'a-valid-oid'
     )
 
     visit root_path
@@ -36,15 +30,9 @@ RSpec.feature 'Hiring staff can sign in' do
   end
 
   scenario 'with valid credentials that do not match a school', elasticsearch: true do
-    OmniAuth.config.mock_auth[:default] = OmniAuth::AuthHash.new(
-      provider: 'default',
-      extra: {
-        raw_info: {
-          id_token_claims: {
-            oid: 'an-unknown-oid'
-          }
-        }
-      }
+    OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(
+      provider: 'dfe',
+      uid: 'an-unknown-oid'
     )
 
     visit root_path
@@ -53,15 +41,5 @@ RSpec.feature 'Hiring staff can sign in' do
 
     expect(page).to have_content(I18n.t('errors.sign_in.unauthorised'))
     within('#proposition-links') { expect(page).not_to have_content(I18n.t('nav.school_page_link')) }
-  end
-
-  scenario 'with invalid credentials' do
-    OmniAuth.config.mock_auth[:default] = :invalid_credentials
-
-    visit root_path
-
-    click_on(I18n.t('nav.sign_in'))
-
-    expect(page).to have_content(I18n.t('errors.sign_in.failure'))
   end
 end

@@ -27,8 +27,8 @@ gem 'lograge'
 gem 'colorize'
 gem 'ipaddr'
 
-gem 'omniauth'
-gem 'omniauth-azure-activedirectory'
+gem 'omniauth', '~> 1.8'
+gem 'omniauth_openid_connect', '~> 0.1'
 
 gem 'breasal', '~> 0.0.1'
 

@@ -16,15 +16,9 @@ RSpec.feature 'School viewing public listings' do
   end
 
   scenario 'A signed in school should see a link back to their own dashboard when viewing public listings' do
-    OmniAuth.config.mock_auth[:default] = OmniAuth::AuthHash.new(
-      provider: 'default',
-      extra: {
-        raw_info: {
-          id_token_claims: {
-            oid: 'a-valid-oid'
-          }
-        }
-      }
+    OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(
+      provider: 'dfe',
+      uid: 'a-valid-oid'
     )
 
     visit root_path
