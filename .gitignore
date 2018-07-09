@@ -25,6 +25,7 @@
 
 # Ignore application configuration
 /config/application.yml
+/config/browserstack_config.yml
 
 /spec/fixtures/temp_schools_data.csv
 

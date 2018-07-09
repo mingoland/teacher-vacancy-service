@@ -89,6 +89,8 @@ group :test do
       git: 'https://github.com/thoughtbot/shoulda-matchers.git',
       branch: 'rails-5'
   gem 'rack_session_access'
+  gem 'selenium-webdriver'
+  gem 'browserstack-local'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

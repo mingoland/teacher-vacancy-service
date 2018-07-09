@@ -1,0 +1,12 @@
+server: "hub-cloud.browserstack.com"
+user: user
+key: key
+project: project
+
+common_caps:
+  "browserstack.debug": true
+  project: project
+
+browser_caps:
+  -
+    "browser": "chrome"

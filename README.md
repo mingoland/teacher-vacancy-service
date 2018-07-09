@@ -1,5 +1,7 @@
 # Teacher Vacancy Service (TVS)
 
+[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=dmZTSWFZVFVBUk5qMmhKMno5dTZFMzJnT1hVdUhySGt2UWxSTkN5VXBHZz0tLU4rdHlZdG1xUEFsQUFvTUhyaFNwclE9PQ==--3359c9135aa05ba913d327f181a1a60df7d52599)](https://www.browserstack.com/automate/public-build/dmZTSWFZVFVBUk5qMmhKMno5dTZFMzJnT1hVdUhySGt2UWxSTkN5VXBHZz0tLU4rdHlZdG1xUEFsQUFvTUhyaFNwclE9PQ==--3359c9135aa05ba913d327f181a1a60df7d52599)
+
 ### Prerequisites
  - [Docker](https://docs.docker.com/docker-for-mac) greater than or equal to `18.03.1-ce-mac64 (24245)`
 
@@ -57,3 +59,8 @@ Populate your envirnoment with real school data from the Edubase archive
 `bin/drake data:schools:import`
 
 _db/seeds.rb contain sample school data so this is not required for development_
+
+----
+
+We're using BrowserStack for cross browser and device testing.
+[![BrowserStack](https://image.ibb.co/cpjc98/browserstack_logo_600x315.png)](http://browserstack.com/)
