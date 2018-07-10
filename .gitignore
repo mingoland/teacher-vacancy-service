@@ -46,3 +46,4 @@ workspace-variables/*.tfvars
 # Certificates
 config/localhost/https/*.key
 config/localhost/https/*.crt
+/config/browserstack.config.yml
