@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
   # Sign in
   resource :sessions, only: %i[new destroy], controller: 'hiring_staff/sessions'
+  post :parse_area, to: 'hiring_staff/sessions#parse_area'
 
   # DfE Sign In
   resource :sessions, only: %i[create], path: '/dfe/sessions', controller: 'hiring_staff/sign_in/dfe/sessions'
