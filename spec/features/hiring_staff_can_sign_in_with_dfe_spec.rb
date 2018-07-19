@@ -40,7 +40,7 @@ RSpec.feature 'Hiring staff can sign in with DfE Sign In' do
     visit root_path
 
     click_on(I18n.t('nav.sign_in'))
-    choose(HiringStaff::IdentificationsController::DFE_SIGN_IN_OPTIONS.first.name)
+    choose(HiringStaff::IdentificationsController::DFE_SIGN_IN_OPTIONS.first.to_radio.last)
     click_on(I18n.t('sign_in.link'))
 
     expect(page).to have_content("Jobs at #{school.name}")
@@ -62,7 +62,7 @@ RSpec.feature 'Hiring staff can sign in with DfE Sign In' do
     visit root_path
 
     click_on(I18n.t('nav.sign_in'))
-    choose(HiringStaff::IdentificationsController::DFE_SIGN_IN_OPTIONS.first.name)
+    choose(HiringStaff::IdentificationsController::DFE_SIGN_IN_OPTIONS.first.to_radio.last)
     click_on(I18n.t('sign_in.link'))
 
     expect(page).to have_content(I18n.t('errors.sign_in.unauthorised'))
