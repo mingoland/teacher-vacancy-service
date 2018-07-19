@@ -8,7 +8,7 @@
   .column-one-third
     = render 'filters'
   .column-two-thirds
-    %p.heading-medium.mt0= @vacancies.total_count_message
+    %p.heading-medium.mt0= @vacancies.total_count
     - if @vacancies.any?
       %div.sortable-links
         = t('jobs.sort_by')
@@ -19,12 +19,8 @@
         - @vacancies.each do |vacancy|
           = render partial: 'vacancy', locals: { vacancy: vacancy }
 
-    - elsif @vacancies.searched
-      %div.empty
-        = t('jobs.no_jobs')
     - else
       %div.empty
-        - t('jobs.none_listed').each do |sentence|
-          %p= sentence
+        = t('jobs.no_jobs')
 
 = paginate @vacancies
