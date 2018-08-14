@@ -1,7 +1,7 @@
 select.date {
   width: 7em;
 }
-.form-group-error {
+.govuk-form-group-error {
   .form-control {
     @extend .form-control-error
   }
